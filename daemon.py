@@ -22,9 +22,10 @@ class Main():
         self.progPath = os.path.dirname(os.path.realpath(__file__))
         self.confFiles = ['main.conf']
         self.start = time.time()
-        self.logger = Logger()
         self.confD = self.checkConfig()
+        self.logger = Logger(logpath=self.confD['logdir'])
         self.pid = self.checkPID()
+
 
     def checkPID(self):
         self.logger.writeToLog(text='Checking for PID file...', lType='startup')
@@ -49,11 +50,11 @@ class Main():
             return curPid
 
     def checkConfig(self):
-        self.logger.writeToLog('Checking my config files')
+        #self.logger.writeToLog('Checking my config files')
         for cFile in self.confFiles:
             confFile = os.path.join(self.progPath, 'conf', cFile)
             if os.path.isfile(confFile):
-                self.logger.writeToLog('Reading {}'.format(confFile), lType='startup')
+         #       self.logger.writeToLog('Reading {}'.format(confFile), lType='startup')
                 with open(confFile, 'r') as f:
                     config = f.readlines()
                     self.confD = {}
@@ -67,7 +68,7 @@ class Main():
                 print(self.confD)
                 return self.confD
             else:
-                self.logger.writeToLog('Config file not found {}'.format(cFile), lType='startup')
+          #      self.logger.writeToLog('Config file not found {}'.format(cFile), lType='startup')
                 sys.exit(0)
 
     def main(self):
@@ -91,7 +92,7 @@ class Main():
             checkrogue.removeOld(int(self.confD['backlog']))
             checkrogue.checkRogue()
 
-            self.logger.cleanupLogs(logpath=self.confD['logdir'], rotate=int(self.confD['logrotate']))
+            self.logger.cleanupLogs(rotate=int(self.confD['logrotate']))
             print('[*] Sleeping for {} seconds...\n'.format(self.confD['wait']))
             time.sleep(int(self.confD['wait']))
 

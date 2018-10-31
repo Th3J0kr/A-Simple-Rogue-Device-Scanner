@@ -33,6 +33,9 @@ class DataManager():
         self.hostL = []
         self.inHosts = []
 
+        if not os.path.isdir(self.wDir):
+            os.mkdir(self.wDir)
+
     def process(self, ip, status):
         ts = datetime.datetime.now().timestamp()
         try:
