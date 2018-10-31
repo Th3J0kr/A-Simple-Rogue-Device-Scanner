@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.7
 
 import os, sys, nmap, argparse, datetime, socket, csv, datetime, time
 
@@ -11,7 +11,7 @@ class Scanner():
 
         nm = nmap.PortScanner()
 
-        nm.scan(hosts=self.ips, arguments='-n -sP -PE -PA21,23,80,3389')
+        nm.scan(hosts=self.ips, arguments='-n -sP -PE -PA22,53,80,3389')
         hosts_list = [(x, nm[x]['status']['state']) for x in nm.all_hosts()]
         #daemon.Main.writeToLog(text='Scan complete')
         dataM = DataManager()
