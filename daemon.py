@@ -11,7 +11,7 @@ from net_scan import Scanner, DataManager
 import time, os, sys, argparse
 import datetime
 import check_scans
-from check_scans import CheckRogue
+from check_scans import CheckRogue, CheckInventory
 import logging
 from logging import Logger
 
@@ -90,7 +90,13 @@ class Main():
             self.logger.writeToLog('Checking scans...')
             checkrogue = CheckRogue()
             checkrogue.removeOld(int(self.confD['backlog']))
-            checkrogue.checkRogue()
+            newDevices = checkrogue.checkRogue()
+            if newDevices:
+                checkScans = CheckInventory(newDevices)
+                checkScans.readInventory()
+                checkScans.compareHosts(newDevices)
+            else:
+                self.logger.writeToLog('No new devices')
 
             self.logger.cleanupLogs(rotate=int(self.confD['logrotate']))
             print('[*] Sleeping for {} seconds...\n'.format(self.confD['wait']))

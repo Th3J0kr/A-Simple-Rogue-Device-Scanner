@@ -38,7 +38,7 @@ class Logger:
                 else:
                     self.writeToLog('No logs yet!')
         else:
-            self.writeToLog('No logs yet!')
+            self.writeToLog('No log dir yet!')
                         
 
 if __name__ == '__main__':
