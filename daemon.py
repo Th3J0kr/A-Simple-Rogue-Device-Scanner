@@ -83,6 +83,9 @@ class Main():
                 print('[*] starting scan on {}...'.format(ipRange))
                 scanner = Scanner(ipRange)
                 scanner.scan()
+                if not os.path.isfile('data/inventory.csv'):
+                    self.logger.writeToLog('No inventory, running initial setup!')
+                    scanner.scan(False)
 
             end = time.time()
             self.logger.writeToLog(text='Scan completed in {} seconds'.format(end - startTime))

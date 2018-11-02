@@ -1,13 +1,14 @@
 #!/usr/bin/env python3.7
 
 import os, sys, nmap, argparse, datetime, socket, csv, datetime, time
+from check_scans import CheckInventory
 
 class Scanner():
     def __init__(self, ips):
         self.ips = ips
         self.hostL = []
     
-    def scan(self):      
+    def scan(self, write=True):      
 
         nm = nmap.PortScanner()
 
@@ -21,8 +22,16 @@ class Scanner():
 
         for host, status in hosts_list:    
             self.hostL = dataM.process(host, status)
-
-        dataM.write(self.hostL)
+            
+        if write:
+            dataM.write(self.hostL)
+        else:
+            outL = []
+            for d in self.hostL:
+                outL.append(d['ip'])
+            inventoryChecker = CheckInventory()
+            inventoryChecker.readInventory()
+            inventoryChecker.compareHosts(outL)
 
 class DataManager():
     def __init__(self):
